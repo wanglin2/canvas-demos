@@ -38,8 +38,17 @@ const onSelect = index => {
         <el-menu-item index="roundedRect">
           <span>圆角矩形</span>
         </el-menu-item>
-        <el-menu-item index="image">
-          <span>图像</span>
+        <el-menu-item index="arrow">
+          <span>箭头</span>
+        </el-menu-item>
+        <el-menu-item index="domToImg">
+          <span>DOM节点转图片</span>
+        </el-menu-item>
+        <el-menu-item index="compressImg">
+          <span>压缩图片</span>
+        </el-menu-item>
+        <el-menu-item index="imgMagnifier">
+          <span>商品图片放大镜</span>
         </el-menu-item>
       </el-menu>
     </div>

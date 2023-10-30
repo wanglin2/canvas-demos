@@ -6,7 +6,10 @@ const routes = [
   { path: '/path', component: () => import('./views/Path.vue') },
   { path: '/signature', component: () => import('./views/Signature.vue') },
   { path: '/roundedRect', component: () => import('./views/RoundedRect.vue') },
-  { path: '/image', component: () => import('./views/Image.vue') }
+  { path: '/arrow', component: () => import('./views/Arrow.vue') },
+  { path: '/domToImg', component: () => import('./views/DomToImg.vue') },
+  { path: '/compressImg', component: () => import('./views/CompressImg.vue') },
+  { path: '/imgMagnifier', component: () => import('./views/ImgMagnifier.vue') }
 ]
 
 const router = createRouter({
