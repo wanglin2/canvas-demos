@@ -9,13 +9,13 @@ import { onMounted } from 'vue'
 
 onMounted(() => {
   const canvas = document.getElementById('canvas')
-  const width = 250
-  const height = 250
-  const ratio = window.devicePixelRatio
-  canvas.width = width * ratio
-  canvas.height = height * ratio
-  canvas.style.width = width + 'px'
-  canvas.style.height = height + 'px'
+  const canvasWidth = 250
+  const canvasHeight = 250
+  const ratio = Math.max(window.devicePixelRatio, 2)
+  canvas.width = canvasWidth * ratio
+  canvas.height = canvasHeight * ratio
+  canvas.style.width = canvasWidth + 'px'
+  canvas.style.height = canvasHeight + 'px'
 
   const ctx = canvas.getContext('2d')
   ctx.scale(ratio, ratio)

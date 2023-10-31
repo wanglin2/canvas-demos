@@ -50,6 +50,12 @@ const onSelect = index => {
         <el-menu-item index="imgMagnifier">
           <span>商品图片放大镜</span>
         </el-menu-item>
+        <el-menu-item index="text">
+          <span>文本</span>
+        </el-menu-item>
+        <el-menu-item index="layoutEngine">
+          <span>排版引擎</span>
+        </el-menu-item>
       </el-menu>
     </div>
     <div class="content">

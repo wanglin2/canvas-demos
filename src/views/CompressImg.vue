@@ -15,7 +15,7 @@ let canvas = null
 onMounted(() => {
   canvas = document.getElementById('canvas')
   const init = (width, height) => {
-    const ratio = window.devicePixelRatio
+    const ratio = Math.max(window.devicePixelRatio, 2)
     canvas.width = width * ratio
     canvas.height = height * ratio
     canvas.style.width = width + 'px'

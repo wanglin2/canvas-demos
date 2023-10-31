@@ -10,13 +10,13 @@ import { getStroke } from 'perfect-freehand'
 
 onMounted(() => {
   const canvas = document.getElementById('canvas')
-  const width = 500
-  const height = 500
-  const ratio = window.devicePixelRatio
-  canvas.width = width * ratio
-  canvas.height = height * ratio
-  canvas.style.width = width + 'px'
-  canvas.style.height = height + 'px'
+  const canvasWidth = 500
+  const canvasHeight = 500
+  const ratio = Math.max(window.devicePixelRatio, 2)
+  canvas.width = canvasWidth * ratio
+  canvas.height = canvasHeight * ratio
+  canvas.style.width = canvasWidth + 'px'
+  canvas.style.height = canvasHeight + 'px'
 
   const ctx = canvas.getContext('2d')
   ctx.scale(ratio, ratio)
@@ -46,7 +46,7 @@ onMounted(() => {
     }
     canvas.addEventListener('mousedown', e => {
       isMousedown = true
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight)
       lastPos = transformPos(e)
     })
     window.addEventListener('mousemove', e => {
@@ -88,7 +88,7 @@ onMounted(() => {
       }
       lastPos = curPos
       pointList.push(curPos)
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight)
       ctx.beginPath()
       pointList.forEach((point, index) => {
         if (index === 0) {
@@ -147,7 +147,7 @@ onMounted(() => {
       let b = pointList[1]
       const c = pointList[2]
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight)
       ctx.beginPath()
       ctx.moveTo(a.x, a.y)
 
@@ -203,7 +203,7 @@ onMounted(() => {
     window.addEventListener('mousemove', e => {
       if (!isMousedown) return
       pointList.push(transformPos(e))
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight)
       const points = getStroke(pointList, {
         size: 5
       })

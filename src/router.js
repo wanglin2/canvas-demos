@@ -9,7 +9,9 @@ const routes = [
   { path: '/arrow', component: () => import('./views/Arrow.vue') },
   { path: '/domToImg', component: () => import('./views/DomToImg.vue') },
   { path: '/compressImg', component: () => import('./views/CompressImg.vue') },
-  { path: '/imgMagnifier', component: () => import('./views/ImgMagnifier.vue') }
+  { path: '/imgMagnifier', component: () => import('./views/ImgMagnifier.vue') },
+  { path: '/text', component: () => import('./views/Text.vue') },
+  { path: '/layoutEngine', component: () => import('./views/LayoutEngine.vue') }
 ]
 
 const router = createRouter({
