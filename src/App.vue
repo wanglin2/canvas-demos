@@ -26,8 +26,8 @@ const onSelect = index => {
   <div class="container">
     <div class="sidebar">
       <el-menu :default-active="defaultActive" class="menu" @select="onSelect">
-        <el-menu-item index="basicUse">
-          <span>基本使用</span>
+        <el-menu-item index="eraser">
+          <span>橡皮擦</span>
         </el-menu-item>
         <el-menu-item index="path">
           <span>路径</span>
@@ -56,6 +56,21 @@ const onSelect = index => {
         <el-menu-item index="layoutEngine">
           <span>排版引擎</span>
         </el-menu-item>
+        <el-menu-item index="transform">
+          <span>变换</span>
+        </el-menu-item>
+        <el-menu-item index="regularPolygon">
+          <span>正多边形</span>
+        </el-menu-item>
+        <!-- <el-menu-item index="imgViewer">
+          <span>图片查看器</span>
+        </el-menu-item> -->
+        <el-menu-item index="event">
+          <span>事件</span>
+        </el-menu-item>
+        <el-menu-item index="bezierEditor">
+          <span>贝塞尔曲线编辑器</span>
+        </el-menu-item>
       </el-menu>
     </div>
     <div class="content">
@@ -75,6 +90,7 @@ const onSelect = index => {
     width: 300px;
     height: 100%;
     flex-shrink: 0;
+    overflow-y: auto;
 
     .menu {
       height: 100%;
