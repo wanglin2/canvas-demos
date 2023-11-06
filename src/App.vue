@@ -71,6 +71,9 @@ const onSelect = index => {
         <el-menu-item index="bezierEditor">
           <span>贝塞尔曲线编辑器</span>
         </el-menu-item>
+        <el-menu-item index="animation">
+          <span>动画</span>
+        </el-menu-item>
       </el-menu>
     </div>
     <div class="content">

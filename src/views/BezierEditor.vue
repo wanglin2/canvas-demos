@@ -14,7 +14,6 @@
 
 <script setup>
 import { onMounted } from 'vue'
-import { textList } from '../constants'
 
 onMounted(() => {
   const canvas = document.getElementById('canvas')
@@ -60,12 +59,6 @@ onMounted(() => {
     x = x * ratio
     y = y * ratio
     return path ? ctx.isPointInPath(path, x, y) : ctx.isPointInPath(x, y)
-  }
-
-  const isPointInStroke = (x, y, path) => {
-    x = x * ratio
-    y = y * ratio
-    return path ? ctx.isPointInStroke(path, x, y) : ctx.isPointInStroke(x, y)
   }
 
   const padding = 20
