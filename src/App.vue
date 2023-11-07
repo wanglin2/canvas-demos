@@ -74,6 +74,9 @@ const onSelect = index => {
         <el-menu-item index="animation">
           <span>动画</span>
         </el-menu-item>
+        <el-menu-item index="liquid">
+          <span>水波图</span>
+        </el-menu-item>
       </el-menu>
     </div>
     <div class="content">

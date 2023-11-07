@@ -17,7 +17,8 @@ const routes = [
   { path: '/imgViewer', component: () => import('./views/ImgViewer.vue') },
   { path: '/event', component: () => import('./views/Event.vue') },
   { path: '/bezierEditor', component: () => import('./views/BezierEditor.vue') },
-  { path: '/animation', component: () => import('./views/Animation.vue') }
+  { path: '/animation', component: () => import('./views/Animation.vue') },
+  { path: '/liquid', component: () => import('./views/Liquid.vue') }
 ]
 
 const router = createRouter({
