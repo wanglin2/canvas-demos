@@ -5,12 +5,12 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, toDisplayString } from 'vue'
 
 onMounted(() => {
   const canvas = document.getElementById('canvas')
-  const canvasWidth = 250
-  const canvasHeight = 250
+  const canvasWidth = 510
+  const canvasHeight = 510
   const ratio = Math.max(window.devicePixelRatio, 2)
   canvas.width = canvasWidth * ratio
   canvas.height = canvasHeight * ratio
@@ -75,6 +75,8 @@ onMounted(() => {
       constructor(opt) {
         // 画布宽度
         this.canvasWidth = opt.canvasWidth
+        // 画布高度
+        this.canvasHeight = opt.canvasHeight
         // 绘图上下文
         this.ctx = opt.ctx
         // 幅度，也就是控制点的y坐标
@@ -87,24 +89,76 @@ onMounted(() => {
         this.fillStyle = opt.fillStyle || '#63daad'
         // 水波数组
         this.waveList = []
-        this.waveRandomList = []
-        // 初始起点
-        this.initStart = opt.initStart || 0
-        // 速度
+        // 步长
         this.step = opt.step || -1
+        this.createWave()
+      }
+
+      createWaveData(start) {
+        return {
+          // 起点
+          p1: {
+            x: start,
+            y: this.yOffset
+          },
+          // 控制点1
+          p2: {
+            x: start + this.frequency / 2,
+            y: this.yOffset + this.amplitude + this.getRandom(-10, 10)
+          },
+          // 控制点2
+          p3: {
+            x: start + this.frequency / 2,
+            y: this.yOffset - this.amplitude + this.getRandom(-10, 10)
+          },
+          // 终点
+          p4: {
+            x: start + this.frequency,
+            y: this.yOffset
+          }
+        }
+      }
+
+      createWave() {
+        for (let start = 0; start < this.canvasWidth; start += this.frequency) {
+          this.waveList.push(this.createWaveData(start))
+        }
       }
 
       draw() {
-        this.waveList = []
-        this.computeWaveList()
-        this.drawWaveList()
-        this.initStart += this.step
-        // 水波向左移动需要复位起始点
-        if (this.step < 0) {
-          if (this.initStart <= -this.frequency) {
-            this.initStart = 0
+        // 更新水波位置
+        this.waveList.forEach(item => {
+          item.p1.x += this.step
+          item.p2.x += this.step
+          item.p3.x += this.step
+          item.p4.x += this.step
+        })
+        // 过滤掉已经移除画布的水波
+        this.waveList = this.waveList.filter(item => {
+          if (this.step > 0) {
+            // 向右移动的水波
+            return item.p1.x < this.canvasWidth
+          } else {
+            // 向左移动的水波
+            return item.p4.x > 0
+          }
+        })
+        if (this.step > 0) {
+          // 根据第一个水波的位置判断是否需要创建新的水波
+          const firstWave = this.waveList[0]
+          if (firstWave.p1.x > 0) {
+            this.waveList.unshift(
+              this.createWaveData(firstWave.p1.x - this.frequency)
+            )
+          }
+        } else {
+          // 根据最后一个水波的位置判断是否需要创建新的水波
+          const lastWave = this.waveList[this.waveList.length - 1]
+          if (lastWave.p4.x < this.canvasWidth) {
+            this.waveList.push(this.createWaveData(lastWave.p4.x))
           }
         }
+        this.drawWave()
       }
 
       getRandom(min, max) {
@@ -114,46 +168,10 @@ onMounted(() => {
         )
       }
 
-      computeWaveList() {
-        let actStart = this.initStart
-        while (actStart > 0) {
-          actStart -= this.frequency
-        }
-        for (
-          let start = actStart;
-          start < this.canvasWidth;
-          start += this.frequency
-        ) {
-          this.waveList.push({
-            // 起点
-            p1: {
-              x: start,
-              y: this.yOffset
-            },
-            // 控制点1
-            p2: {
-              x: start + this.frequency / 2,
-              y: this.yOffset + this.amplitude
-            },
-            // 控制点2
-            p3: {
-              x: start + this.frequency / 2,
-              y: this.yOffset - this.amplitude
-            },
-            // 终点
-            p4: {
-              x: start + this.frequency,
-              y: this.yOffset
-            }
-          })
-        }
-      }
-
-      drawWaveList() {
+      drawWave() {
         this.ctx.save()
         this.ctx.translate(0, canvasHeight)
         this.ctx.scale(1, -1)
-
         this.ctx.beginPath()
         this.waveList.forEach((item, index) => {
           if (index === 0) {
@@ -179,29 +197,56 @@ onMounted(() => {
 
     const wave = new Wave({
       canvasWidth,
+      canvasHeight,
       ctx,
       yOffset: 100
     })
     const wave2 = new Wave({
       canvasWidth,
+      canvasHeight,
       ctx,
-      yOffset: 95,
+      yOffset: 90,
       fillStyle: '#8f12fe',
-      initStart: -70,
       step: -2
     })
-    const wave3 = new Wave({
-      canvasWidth,
-      ctx,
-      yOffset: 80,
-      fillStyle: '#ff974d',
-      step: 2
-    })
+    // const wave3 = new Wave({
+    //   canvasWidth,
+    //   canvasHeight,
+    //   ctx,
+    //   yOffset: 80,
+    //   fillStyle: '#ff974d',
+    //   step: 2
+    // })
+
+    const clip = () => {
+      ctx.beginPath()
+      ctx.arc(
+        canvasWidth / 2,
+        canvasHeight / 2,
+        canvasWidth / 2,
+        0,
+        Math.PI * 2
+      )
+      ctx.stroke()
+      ctx.clip()
+    }
+
+    const clip2 = () => {
+      let path = new Path2D(
+        'M367.855,428.202c-3.674-1.385-7.452-1.966-11.146-1.794c0.659-2.922,0.844-5.85,0.58-8.719 c-0.937-10.407-7.663-19.864-18.063-23.834c-10.697-4.043-22.298-1.168-29.902,6.403c3.015,0.026,6.074,0.594,9.035,1.728 c13.626,5.151,20.465,20.379,15.32,34.004c-1.905,5.02-5.177,9.115-9.22,12.05c-6.951,4.992-16.19,6.536-24.777,3.271 c-13.625-5.137-20.471-20.371-15.32-34.004c0.673-1.768,1.523-3.423,2.526-4.992h-0.014c0,0,0,0,0,0.014 c4.386-6.853,8.145-14.279,11.146-22.187c23.294-61.505-7.689-130.278-69.215-153.579c-61.532-23.293-130.279,7.69-153.579,69.202 c-6.371,16.785-8.679,34.097-7.426,50.901c0.026,0.554,0.079,1.121,0.132,1.688c4.973,57.107,41.767,109.148,98.945,130.793 c58.162,22.008,121.303,6.529,162.839-34.465c7.103-6.893,17.826-9.444,27.679-5.719c11.858,4.491,18.565,16.6,16.719,28.643 c4.438-3.126,8.033-7.564,10.117-13.045C389.751,449.992,382.411,433.709,367.855,428.202z'
+      )
+      ctx.lineWidth = 5
+      ctx.strokeStyle = '#ff974d'
+      ctx.stroke(path)
+      ctx.clip(path)
+    }
+
+    clip2()
     const draw = () => {
       ctx.clearRect(0, 0, canvasWidth, canvasHeight)
       wave.draw()
       wave2.draw()
-      wave3.draw()
+      // wave3.draw()
       requestAnimationFrame(draw)
     }
     draw()
