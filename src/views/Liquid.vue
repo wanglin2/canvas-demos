@@ -162,10 +162,7 @@ onMounted(() => {
       }
 
       getRandom(min, max) {
-        return (
-          Math.floor(Math.random() * (max - min) + min) *
-          (Math.random() > 0.5 ? 1 : -1)
-        )
+        return Math.floor(Math.random() * (max - min) + min)
       }
 
       drawWave() {

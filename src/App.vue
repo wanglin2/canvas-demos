@@ -77,6 +77,9 @@ const onSelect = index => {
         <el-menu-item index="liquid">
           <span>水波图</span>
         </el-menu-item>
+        <el-menu-item index="searchlight">
+          <span>探照灯</span>
+        </el-menu-item>
       </el-menu>
     </div>
     <div class="content">

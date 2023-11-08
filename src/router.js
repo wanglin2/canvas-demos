@@ -18,7 +18,8 @@ const routes = [
   { path: '/event', component: () => import('./views/Event.vue') },
   { path: '/bezierEditor', component: () => import('./views/BezierEditor.vue') },
   { path: '/animation', component: () => import('./views/Animation.vue') },
-  { path: '/liquid', component: () => import('./views/Liquid.vue') }
+  { path: '/liquid', component: () => import('./views/Liquid.vue') },
+  { path: '/searchlight', component: () => import('./views/Searchlight.vue') }
 ]
 
 const router = createRouter({
