@@ -46,7 +46,7 @@ onMounted(() => {
   }
 
   const rect = canvas.getBoundingClientRect()
-  const transformPos = e => {
+  const windowToCanvas = e => {
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
     return {
@@ -160,7 +160,7 @@ onMounted(() => {
     y: 0
   }
   canvas.addEventListener('mousedown', e => {
-    const pos = transformPos(e)
+    const pos = windowToCanvas(e)
     mousedownPos.x = pos.x
     mousedownPos.y = pos.y
 
@@ -187,7 +187,7 @@ onMounted(() => {
   })
   window.addEventListener('mousemove', e => {
     if (!mousedownPoint) return
-    const pos = transformPos(e)
+    const pos = windowToCanvas(e)
     const dx = pos.x - mousedownPos.x
     const dy = pos.y - mousedownPos.y
     let newX = mousedownPointPos.x + dx

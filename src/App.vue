@@ -26,17 +26,20 @@ const onSelect = index => {
   <div class="container">
     <div class="sidebar">
       <el-menu :default-active="defaultActive" class="menu" @select="onSelect">
+        <el-menu-item index="basicUse">
+          <span>基本使用</span>
+        </el-menu-item>
         <el-menu-item index="eraser">
           <span>橡皮擦</span>
         </el-menu-item>
         <el-menu-item index="path">
           <span>路径</span>
         </el-menu-item>
-        <el-menu-item index="signature">
-          <span>电子签名</span>
-        </el-menu-item>
         <el-menu-item index="roundedRect">
           <span>圆角矩形</span>
+        </el-menu-item>
+        <el-menu-item index="signature">
+          <span>电子签名</span>
         </el-menu-item>
         <el-menu-item index="arrow">
           <span>箭头</span>
@@ -62,9 +65,6 @@ const onSelect = index => {
         <el-menu-item index="regularPolygon">
           <span>正多边形</span>
         </el-menu-item>
-        <!-- <el-menu-item index="imgViewer">
-          <span>图片查看器</span>
-        </el-menu-item> -->
         <el-menu-item index="event">
           <span>事件</span>
         </el-menu-item>
@@ -79,6 +79,9 @@ const onSelect = index => {
         </el-menu-item>
         <el-menu-item index="searchlight">
           <span>探照灯</span>
+        </el-menu-item>
+        <el-menu-item index="firework">
+          <span>烟花</span>
         </el-menu-item>
       </el-menu>
     </div>

@@ -22,7 +22,7 @@ onMounted(() => {
   ctx.scale(ratio, ratio)
 
   const rect = canvas.getBoundingClientRect()
-  const transformPos = e => {
+  const windowToCanvas = e => {
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
     return {
@@ -47,13 +47,13 @@ onMounted(() => {
     canvas.addEventListener('mousedown', e => {
       isMousedown = true
       ctx.clearRect(0, 0, canvasWidth, canvasHeight)
-      lastPos = transformPos(e)
+      lastPos = windowToCanvas(e)
     })
     window.addEventListener('mousemove', e => {
       if (!isMousedown) return
       ctx.beginPath()
       ctx.moveTo(lastPos.x, lastPos.y)
-      lastPos = transformPos(e)
+      lastPos = windowToCanvas(e)
       ctx.lineTo(lastPos.x, lastPos.y)
       ctx.lineWidth = 5
       ctx.stroke()
@@ -71,12 +71,12 @@ onMounted(() => {
     let lastPos = null
     canvas.addEventListener('mousedown', e => {
       isMousedown = true
-      lastPos = transformPos(e)
+      lastPos = windowToCanvas(e)
       pointList.push(lastPos)
     })
     window.addEventListener('mousemove', e => {
       if (!isMousedown) return
-      const curPos = transformPos(e)
+      const curPos = windowToCanvas(e)
       const distance = getTwoPointDistance(
         curPos.x,
         curPos.y,
@@ -114,12 +114,12 @@ onMounted(() => {
     let lastPos = null
     canvas.addEventListener('mousedown', e => {
       isMousedown = true
-      lastPos = transformPos(e)
+      lastPos = windowToCanvas(e)
       pointList.push(lastPos)
     })
     window.addEventListener('mousemove', e => {
       if (!isMousedown) return
-      const curPos = transformPos(e)
+      const curPos = windowToCanvas(e)
       const distance = getTwoPointDistance(
         curPos.x,
         curPos.y,
@@ -130,7 +130,7 @@ onMounted(() => {
         return
       }
       lastPos = curPos
-      pointList.push(transformPos(e))
+      pointList.push(windowToCanvas(e))
       const len = pointList.length
       if (len < 4) {
         return
@@ -198,11 +198,11 @@ onMounted(() => {
     canvas.addEventListener('mousedown', e => {
       isMousedown = true
       pointList = []
-      pointList.push(transformPos(e))
+      pointList.push(windowToCanvas(e))
     })
     window.addEventListener('mousemove', e => {
       if (!isMousedown) return
-      pointList.push(transformPos(e))
+      pointList.push(windowToCanvas(e))
       ctx.clearRect(0, 0, canvasWidth, canvasHeight)
       const points = getStroke(pointList, {
         size: 5

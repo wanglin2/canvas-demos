@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
   { path: '/', redirect: '/basicUse' },
+  { path: '/basicUse', component: () => import('./views/BasicUse.vue') },
   { path: '/eraser', component: () => import('./views/Eraser.vue') },
   { path: '/path', component: () => import('./views/Path.vue') },
   { path: '/signature', component: () => import('./views/Signature.vue') },
@@ -19,7 +20,8 @@ const routes = [
   { path: '/bezierEditor', component: () => import('./views/BezierEditor.vue') },
   { path: '/animation', component: () => import('./views/Animation.vue') },
   { path: '/liquid', component: () => import('./views/Liquid.vue') },
-  { path: '/searchlight', component: () => import('./views/Searchlight.vue') }
+  { path: '/searchlight', component: () => import('./views/Searchlight.vue') },
+  { path: '/firework', component: () => import('./views/Firework.vue') }
 ]
 
 const router = createRouter({

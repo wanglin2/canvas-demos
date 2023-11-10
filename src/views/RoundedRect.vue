@@ -111,6 +111,7 @@ onMounted(() => {
   }
 
   createRoundedRect(50, 50, 100, 100, 50)
+  // createRoundedRect2(50, 50, 100, 100, 10)
 })
 </script>
 
