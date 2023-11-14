@@ -45,7 +45,7 @@ onMounted(() => {
     list.splice(index, 1)
   }
 
-  // 爆炸碎片
+  // 爆炸碎片类
   class ExplosiveDebris {
     constructor(opt) {
       this.firework = opt.firework
@@ -60,7 +60,9 @@ onMounted(() => {
       this.g = opt.g || 0.98
       this.time = getRandom(0.5, 1)
       this.startTime = 0
+      // 痕迹碎片数量
       this.debrisCount = opt.debrisCount || 3
+      // 是否要进行二次爆炸
       this.secondBurst = opt.secondBurst || false
     }
 
@@ -74,7 +76,8 @@ onMounted(() => {
       this.x += this.vx
       this.y += vy
       const progress = duration / this.time
-      const opacity = progress > 0.7 ? 1 - 1 * progress : 1
+      let opacity = progress > 0.7 ? 1 - 1 * progress : 1
+      if (opacity < 0) opacity = 0
       drawCircle({
         x: this.x,
         y: this.y,
@@ -82,7 +85,7 @@ onMounted(() => {
         radius: this.radius,
         opacity: opacity
       })
-      // 添加碎片
+      // 添加痕迹碎片
       if (this.debrisCount > 0 && Math.random() > 0.8) {
         this.debrisCount--
         this.firework.addDebris({
@@ -96,12 +99,12 @@ onMounted(() => {
       return {
         x: this.x,
         y: this.y,
-        isEnd: duration > this.time
+        isEnd: progress >= 1
       }
     }
   }
 
-  // 爆炸器
+  // 爆炸器类
   class Explosive {
     constructor(opt) {
       this.firework = opt.firework
@@ -111,9 +114,9 @@ onMounted(() => {
       // 爆炸碎片列表
       this.debrisList = []
       // 爆炸碎片数量
-      this.debrisNum = getRandom(50, 400)
+      this.debrisNum = opt.debrisNum || getRandom(50, 400)
       // 是否要二次爆炸
-      this.secondBurst = opt.secondBurst || Math.random() > 0.8
+      this.secondBurst = opt.secondBurst || this.debrisNum <= 100
       //是否是第一次爆炸
       this.isFirstBurst = true
     }
@@ -122,7 +125,6 @@ onMounted(() => {
       const num = debrisNum || this.debrisNum
       opt.x = opt.x || this.x
       opt.y = opt.y || this.y
-      opt.speed = opt.speed || null
       opt.secondBurst = this.secondBurst && this.isFirstBurst
       for (let i = 0; i < num; i++) {
         const explosiveDebris = new ExplosiveDebris({
@@ -158,7 +160,7 @@ onMounted(() => {
     }
   }
 
-  // 碎片类
+  // 痕迹碎片类
   class Debris {
     constructor(opt = {}) {
       // 颜色
@@ -234,14 +236,15 @@ onMounted(() => {
       )
       y = Math.min(y, this.ty)
       // 透明度变小
-      const opacity = 1 - 1 * (y / this.ty)
+      let opacity = 1 - 1 * (y / this.ty)
+      if (opacity < 0) opacity = 0
       this.draw(x, y, opacity)
-      // 添加碎片
+      // 添加痕迹碎片
       if (Math.random() > 0.7 && opacity >= 0.1) {
         this.firework.addDebris({
-          x: x + getRandom(-2, 2),
+          x: x + getRandom(-2, 2), // x坐标添加一段随机量
           y
-        }) // x坐标添加一段随机量
+        })
       }
       return {
         x,
@@ -281,7 +284,7 @@ onMounted(() => {
       this.explosive = null
       // 烟花状态：waiting（等待发射）、launching（发射中）、bursting（爆炸中）、end（烟花结束）
       this.status = 'waiting'
-      // 碎片列表
+      // 痕迹碎片列表
       this.debrisList = []
     }
 
@@ -320,11 +323,11 @@ onMounted(() => {
           this.status = 'end'
         }
       }
-      // 更新碎片
+      // 更新痕迹碎片
       this.updateDebris()
     }
 
-    // 添加碎片
+    // 添加痕迹碎片
     addDebris(opt = {}) {
       const debris = new Debris({
         ...opt,
@@ -334,7 +337,7 @@ onMounted(() => {
       this.debrisList.push(debris)
     }
 
-    // 更新碎片
+    // 更新痕迹碎片
     updateDebris() {
       const list = [...this.debrisList]
       list.forEach(debris => {
@@ -379,18 +382,22 @@ onMounted(() => {
   draw()
 
   // 烟花颜色列表
-  const colorList = [
-    '#ff0043',
-    '#14fc56',
-    '#1e7fff',
-    '#e60aff',
-    '#ffbf36',
-    '#ffffff'
-  ]
+  const createFireworkColor = () => {
+    const colorList = [
+      '#ff0043',
+      '#14fc56',
+      '#1e7fff',
+      '#e60aff',
+      '#ffbf36',
+      '#ffffff'
+    ]
+    return colorList[Math.floor(Math.random() * colorList.length)]
+  }
+
   // 发射烟花
   launcherBtn.addEventListener('click', () => {
     const firework = new Firework({
-      color: colorList[Math.floor(Math.random() * colorList.length)]
+      color: createFireworkColor()
     })
     fireworkList.push(firework)
     firework.launch()
