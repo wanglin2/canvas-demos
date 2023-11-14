@@ -12,6 +12,7 @@
     "bezier-easing": "^2.1.0",
     "element-plus": "^2.4.1",
     "perfect-freehand": "^1.2.0",
+    "tinycolor2": "^1.6.0",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5"
   },
