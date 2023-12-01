@@ -195,6 +195,8 @@ onMounted(() => {
   const perfect = () => {
     let isMousedown = false
     let pointList = []
+    let lineList = []
+    let line = null
     canvas.addEventListener('mousedown', e => {
       isMousedown = true
       pointList = []
@@ -204,15 +206,33 @@ onMounted(() => {
       if (!isMousedown) return
       pointList.push(windowToCanvas(e))
       ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+      lineList.forEach(item => {
+        ctx.fill(item)
+      })
       const points = getStroke(pointList, {
-        size: 5
+        size: 16,
+        thinning: 0.5,
+        smoothing: 0.5,
+        streamline: 0.5,
+        start: {
+          cap: true,
+          taper: 0,
+          easing: t => t
+        },
+        end: {
+          cap: true,
+          taper: 0,
+          easing: t => t
+        }
       })
       const pathData = getSvgPathFromStroke(points)
       const path = new Path2D(pathData)
+      line = path
       ctx.fill(path)
     })
     window.addEventListener('mouseup', () => {
       isMousedown = false
+      lineList.push(line)
     })
 
     const getSvgPathFromStroke = points => {
