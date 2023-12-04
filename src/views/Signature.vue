@@ -1,6 +1,9 @@
 <template>
   <div class="canvasBox">
-    <canvas id="canvas"></canvas>
+    <div class="canvasWrap">
+      <canvas id="canvas2"></canvas>
+      <canvas id="canvas"></canvas>
+    </div>
   </div>
 </template>
 
@@ -10,16 +13,22 @@ import { getStroke } from 'perfect-freehand'
 
 onMounted(() => {
   const canvas = document.getElementById('canvas')
+  const canvas2 = document.getElementById('canvas2')
   const canvasWidth = 500
   const canvasHeight = 500
   const ratio = Math.max(window.devicePixelRatio, 2)
-  canvas.width = canvasWidth * ratio
-  canvas.height = canvasHeight * ratio
-  canvas.style.width = canvasWidth + 'px'
-  canvas.style.height = canvasHeight + 'px'
 
-  const ctx = canvas.getContext('2d')
-  ctx.scale(ratio, ratio)
+  const initCanvas = canvas => {
+    canvas.width = canvasWidth * ratio
+    canvas.height = canvasHeight * ratio
+    canvas.style.width = canvasWidth + 'px'
+    canvas.style.height = canvasHeight + 'px'
+    const ctx = canvas.getContext('2d')
+    ctx.scale(ratio, ratio)
+    return ctx
+  }
+  const ctx = initCanvas(canvas)
+  const ctx2 = initCanvas(canvas2)
 
   const rect = canvas.getBoundingClientRect()
   const windowToCanvas = e => {
@@ -256,7 +265,80 @@ onMounted(() => {
       return result
     }
   }
-  perfect()
+  // perfect()
+
+  // 两个canvas
+  const perfect2 = () => {
+    let isMousedown = false
+    let pointList = []
+    let lineList = []
+    let line = null
+    const clearCanvas = _ctx => {
+      _ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+    }
+    canvas.addEventListener('mousedown', e => {
+      isMousedown = true
+      pointList = []
+      pointList.push(windowToCanvas(e))
+    })
+    window.addEventListener('mousemove', e => {
+      if (!isMousedown) return
+      pointList.push(windowToCanvas(e))
+      clearCanvas(ctx)
+      const points = getStroke(pointList, {
+        size: 16,
+        thinning: 0.5,
+        smoothing: 0.5,
+        streamline: 0.5,
+        start: {
+          cap: true,
+          taper: 0,
+          easing: t => t
+        },
+        end: {
+          cap: true,
+          taper: 0,
+          easing: t => t
+        }
+      })
+      const pathData = getSvgPathFromStroke(points)
+      const path = new Path2D(pathData)
+      line = path
+      ctx.fill(path)
+    })
+    window.addEventListener('mouseup', () => {
+      isMousedown = false
+      lineList.push(line)
+      // 绘制完成后就将图形移到canvas2
+      clearCanvas(ctx)
+      clearCanvas(ctx2)
+      lineList.forEach(item => {
+        ctx2.fill(item)
+      })
+    })
+
+    const getSvgPathFromStroke = points => {
+      const len = points.length
+      if (len < 4) {
+        return ''
+      }
+      let a = points[0]
+      let b = points[1]
+      const c = points[2]
+      let result = `M${a[0]},${a[1]} Q${b[0]},${b[1]} ${average(
+        b[0],
+        c[0]
+      )},${average(b[1], c[1])} T`
+      for (let i = 2, max = len - 1; i < max; i++) {
+        a = points[i]
+        b = points[i + 1]
+        result += `${average(a[0], b[0])},${average(a[1], b[1])} `
+      }
+      result += 'Z'
+      return result
+    }
+  }
+  perfect2()
 })
 </script>
 
@@ -268,7 +350,16 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
 
+  .canvasWrap {
+    position: relative;
+    width: 500px;
+    height: 500px;
+  }
+
   canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
     border: 1px solid;
   }
 }
