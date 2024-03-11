@@ -115,7 +115,7 @@ onMounted(() => {
   //     ctx.drawImage(img, 0, 0)
   //     console.log(isPointInPath(10, 10))
   //   }
-  //   img.src = '/big.jpg'
+  //   img.src = (import.meta.env.PROD ? 'https://wanglin2.github.io/canvas-demos' : '') + '/big.jpg'
 
   // 9
   const path = new Path2D()

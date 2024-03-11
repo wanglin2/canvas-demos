@@ -31,7 +31,7 @@ onMounted(() => {
       const ctx = init(img.width, img.height)
       ctx.drawImage(img, 0, 0)
     }
-    img.src = '/big.jpg'
+    img.src = (import.meta.env.PROD ? 'https://wanglin2.github.io/canvas-demos' : '') + '/big.jpg'
   }
   // useQuality()
 
@@ -55,7 +55,7 @@ onMounted(() => {
       const ctx = init(targetWidth, targetHeight)
       ctx.drawImage(img, 0, 0, targetWidth, targetHeight)
     }
-    img.src = '/big.jpg'
+    img.src = (import.meta.env.PROD ? 'https://wanglin2.github.io/canvas-demos' : '') + '/big.jpg'
   }
   useScale({
     targetWidth: 2000

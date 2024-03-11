@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const route = useRoute()
@@ -16,6 +16,14 @@ watch(
     defaultActive.value = route.path.slice(1)
   }
 )
+
+const url = computed(() => {
+  const p = route.path.slice(1)
+  if (!p) return ''
+  const first = p[0]
+  const u = p.slice(1)
+  return 'https://github.com/wanglin2/canvas-demos/blob/main/src/views/' + (first.toUpperCase() + u) + '.vue'
+})
 
 const onSelect = index => {
   router.push('/' + index)
@@ -71,6 +79,12 @@ const onSelect = index => {
         <el-menu-item index="bezierEditor">
           <span>贝塞尔曲线编辑器</span>
         </el-menu-item>
+        <el-menu-item index="px">
+          <span>像素</span>
+        </el-menu-item>
+        <el-menu-item index="filter">
+          <span>图片滤镜</span>
+        </el-menu-item>
         <el-menu-item index="animation">
           <span>动画</span>
         </el-menu-item>
@@ -87,6 +101,9 @@ const onSelect = index => {
     </div>
     <div class="content">
       <router-view></router-view>
+      <div class="link">
+        源码地址：<a target="_blank" :href="url">{{ url }}</a>
+      </div>
     </div>
   </div>
 </template>
@@ -112,6 +129,16 @@ const onSelect = index => {
   .content {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    .link {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 }
 </style>

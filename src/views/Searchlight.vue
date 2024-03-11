@@ -26,7 +26,7 @@ onMounted(() => {
     img.onload = () => {
       callback(img)
     }
-    img.src = '/pic2.webp'
+    img.src = (import.meta.env.PROD ? 'https://wanglin2.github.io/canvas-demos' : '') + '/pic2.webp'
   }
 
   loadImage(img => {
